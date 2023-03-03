@@ -140,7 +140,7 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
         if(max < 3 || cfIdxSum % 2 == 0) {
             return "";
         } else {
-            return dirs[3-idxMax];
+            return dirs[idxMax];
         }
     }
     public boolean isOnEdge(int radius, int val) {
