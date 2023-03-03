@@ -22,6 +22,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> LIMESTONE_BLOCK = block("limestone_block", ModBlockProperties.LIMESTONE_BLOCK);
     public static final RegistryObject<Block> ENRICHED_DIRT_BLOCK = block("enriched_dirt_block", ModBlockProperties.ENRICHED_DIRT_BLOCK);
     public static final RegistryObject<Block> ENRICHED_MYCELIUM_BLOCK = block("enriched_mycelium_block", ModBlockProperties.ENRICHED_MYCELIUM_BLOCK);
+    public static final RegistryObject<Block> BLUESHROOM_STEM_BLOCK = BLOCKS.register("blueshroom_stem_block", () -> new BlueshroomStemBlock(ModBlockProperties.BLUESHROOM_STEM_BLOCK));
+    public static final RegistryObject<Block> BLUESHROOM_CAP_BLOCK = BLOCKS.register("blueshroom_cap_block", () -> new BlueshroomCapBlock(ModBlockProperties.BLUESHROOM_CAP_BLOCK));
+
 
     private static RegistryObject<Block> block(String name, BlockBehaviour.Properties properties) {
         return BLOCKS.register(name, () -> new Block(properties));
