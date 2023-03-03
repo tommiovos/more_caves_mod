@@ -26,9 +26,6 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
         WorldGenLevel level = ctx.level();
         BlockPos origin = ctx.origin();
         BlockPos target_block = origin;
-
-
-
         //BlockState state = level.getBlockState(target_block.above());
         HotCaveVegetationConfig config = ctx.config();
         RandomSource randomSource = ctx.random();
@@ -36,23 +33,48 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
         BlockState cap = Blocks.BROWN_MUSHROOM_BLOCK.defaultBlockState();
         BlockState enriched_mycelium = ModBlocks.ENRICHED_MYCELIUM_BLOCK.get().defaultBlockState();
         BlockState enriched_dirt = ModBlocks.ENRICHED_DIRT_BLOCK.get().defaultBlockState();
-        // between 0 and 3 (inclusive)
-        int randomNum = ThreadLocalRandom.current().nextInt(1, 4 + 1);
-        for (int i=0; i<randomNum; i++) {
-            level.setBlock(target_block, stem, 2);
-            target_block = target_block.below(1);
+        int stemLength = ThreadLocalRandom.current().nextInt(1, 4 + 1);
+
+        String dir = shroomDirection(origin, level);
+        switch (dir) {
+            case "" -> {
+                for (int i = 0; i < stemLength; i++) {
+                    level.setBlock(target_block, stem, 2);
+                    target_block = target_block.below(1);
+                }
+            }
+            case "N" -> {
+                for (int i = 0; i < stemLength; i++) {
+                    level.setBlock(target_block, stem, 2);
+                    target_block = target_block.below().north();
+                }
+            }
+            case "E" -> {
+                for (int i = 0; i < stemLength; i++) {
+                    level.setBlock(target_block, stem, 2);
+                    target_block = target_block.below().east();
+                }
+            }
+            case "W" -> {
+                for (int i = 0; i < stemLength; i++) {
+                    level.setBlock(target_block, stem, 2);
+                    target_block = target_block.below().west();
+                }
+            }
+            case "S" -> {
+                for (int i = 0; i < stemLength; i++) {
+                    level.setBlock(target_block, stem, 2);
+                    target_block = target_block.below().south();
+                }
+            }
         }
 
         // Create mushroom cap
-        level.setBlock(target_block.north().west(), cap, 2);
-        level.setBlock(target_block.north(), cap, 2);
-        level.setBlock(target_block.north().east(), cap, 2);
-        level.setBlock(target_block.west(), cap, 2);
-        level.setBlock(target_block, cap, 2);
-        level.setBlock(target_block.east(), cap, 2);
-        level.setBlock(target_block.south().west(), cap, 2);
-        level.setBlock(target_block.south(), cap, 2);
-        level.setBlock(target_block.south().east(), cap, 2);
+        for (int x=0; x<3; x++) {
+            for (int z=0; z<3; z++) {
+                level.setBlock(target_block.offset(x-1, 0, z-1), cap, 2);
+            }
+        }
 
         // change enriched dirt around to enriched mycelium
         int radius = 5;
@@ -75,6 +97,7 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
                 }
             }
         }
+
         return true;
     }
 
