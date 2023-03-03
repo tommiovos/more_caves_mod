@@ -80,7 +80,7 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
 
     public String shroomDirection(BlockPos pos, WorldGenLevel level) {
         pos = pos.below(2);
-        String[] dirs = {"E", "N", "W", "S"};
+        String[] dirs = {"E", "S", "W", "N"};
         int[] voidBlocksCount = {0, 0, 0, 0};
         int[] posNegArray = {1, 1, -1, -1};
 
