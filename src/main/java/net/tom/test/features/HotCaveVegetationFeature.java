@@ -103,12 +103,13 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
 
     public String shroomDirection(BlockPos pos, WorldGenLevel level) {
         pos = pos.below(2);
-        String[] dirs = {"E", "S", "W", "N"};
+        String[] dirs = {"W", "N", "E", "S"};
         int[] voidBlocksCount = {0, 0, 0, 0};
         int[] posNegArray = {1, 1, -1, -1};
-
-       /* X - Determines your position East/West in the map. A positive value increases your position to the East. ...
-          Y - Determines your position up/down in the map. A positive value increases your position upward. ...*/
+        /*
+            X - Determines your position East/West in the map. A positive value increases your position to the East
+            Z - Determines your position South/North in the map. A positive value increases your position to the South.
+        */
         for (int i = 0; i < 4; i++) {
             int x = 0;
             int z = 0;
@@ -139,7 +140,7 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
         if(max < 3 || cfIdxSum % 2 == 0) {
             return "";
         } else {
-            return dirs[idxMax];
+            return dirs[3-idxMax];
         }
     }
     public boolean isOnEdge(int radius, int val) {
