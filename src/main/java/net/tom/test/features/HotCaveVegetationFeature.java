@@ -13,6 +13,7 @@ import net.tom.test.block.ModBlocks;
 import net.tom.test.features.configuration.HotCaveVegetationConfig;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
@@ -79,38 +80,45 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
 
     public String shroomDirection(BlockPos pos, WorldGenLevel level) {
         pos = pos.below(2);
+        String[] dirs = {"E", "N", "W", "S"};
         int[] voidBlocksCount = {0, 0, 0, 0};
-        for (int i=0; i<4; i++) {
-            for(int j=1; j<6; j++) {
-                switch (i) {
-                    case 0: {
-                        if (level.getBlockState(pos.offset(j, 0, 0)) == Blocks.AIR.defaultBlockState()) {
-                            voidBlocksCount[0] += 1;
-                        }
-                    }
-                    case 1: {
-                        if (level.getBlockState(pos.offset(-j, 0, 0)) == Blocks.AIR.defaultBlockState()) {
-                            voidBlocksCount[1] += 1;
-                        }
-                    }
-                    case 2: {
-                        if (level.getBlockState(pos.offset(0, 0, j)) == Blocks.AIR.defaultBlockState()) {
-                            voidBlocksCount[1] += 1;
-                        }
-                    }
-                    case 3: {
-                        if (level.getBlockState(pos.offset(0, 0, -j)) == Blocks.AIR.defaultBlockState()) {
-                            voidBlocksCount[1] += 1;
-                        }
-                    }
+        int[] posNegArray = {1, 1, -1, -1};
+
+       /* X - Determines your position East/West in the map. A positive value increases your position to the East. ...
+          Y - Determines your position up/down in the map. A positive value increases your position upward. ...*/
+        for (int i = 0; i < 4; i++) {
+            int x = 0;
+            int z = 0;
+            int p = posNegArray[i];
+            if (i % 2 == 0) {
+                x = p;
+            } else {
+                z = p;
+            }
+            for (int j = 1; j < 6; j++) {
+                if (level.getBlockState(pos.offset(j * x, 0, j * z)) != Blocks.AIR.defaultBlockState()) {
+                    voidBlocksCount[i]++;
                 }
             }
-
         }
-
-        //if (Collections.max(voidBlocksCount))
+        int idxMax = 0;
+        int max = voidBlocksCount[0];
+        int cfIdxSum = -1;
+        for(int i = 1; i < 4; i++) {
+            if(voidBlocksCount[i] > max) {
+                cfIdxSum = -1;
+                max = voidBlocksCount[i];
+                idxMax = i;
+            } else if(voidBlocksCount[i] == max) {
+                cfIdxSum = idxMax + i;
+            }
+        }
+        if(max < 3 || cfIdxSum % 2 == 0) {
+            return "";
+        } else {
+            return dirs[idxMax];
+        }
     }
-
     public boolean isOnEdge(int radius, int val) {
         return (val == 0 || val == radius-1);
     }
