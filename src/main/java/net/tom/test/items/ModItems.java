@@ -16,6 +16,8 @@ public class ModItems {
     public static final RegistryObject<Item> LIMESTONE_BLOCK = blockItem(ModBlocks.LIMESTONE_BLOCK);
     public static final RegistryObject<Item> ENRICHED_DIRT_BLOCK = blockItem(ModBlocks.ENRICHED_DIRT_BLOCK);
     public static final RegistryObject<Item> ENRICHED_MYCELIYUM_BLOCK = blockItem(ModBlocks.ENRICHED_MYCELIUM_BLOCK);
+    public static final RegistryObject<Item> BLUESHROOM_STEM_BLOCK = blockItem(ModBlocks.BLUESHROOM_STEM_BLOCK);
+    public static final RegistryObject<Item> BLUESHROOM_CAP_BLOCK = blockItem(ModBlocks.BLUESHROOM_CAP_BLOCK);
 
     private static RegistryObject<Item> blockItem(RegistryObject<? extends Block> block) {
         return ITEMS.register(block.getId().getPath(), () -> new BlockItem(block.get(), properties()));
