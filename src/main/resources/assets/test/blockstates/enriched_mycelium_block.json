@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "test:block/enriched_mycelium_block" }
+  }
+}

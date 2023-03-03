@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "test:block/limestone_block"
+    "all": "test:block/enriched_dirt_block"
   }
 }

@@ -1,5 +1,5 @@
 {
   "variants": {
-    "": { "model": "example:block/limestone_block" }
+    "": { "model": "test:block/limestone_block" }
   }
 }

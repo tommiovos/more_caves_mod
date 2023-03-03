@@ -1,0 +1,11 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "north": "test:block/enriched_mycelium_block_side",
+    "east": "test:block/enriched_mycelium_block_side",
+    "south": "test:block/enriched_mycelium_block_side",
+    "west": "test:block/enriched_mycelium_block_side",
+    "down": "test:block/enriched_mycelium_block_bot",
+    "up": "test:block/enriched_dirt_block"
+  }
+}

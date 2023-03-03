@@ -1,3 +1,5 @@
 {
-  "block.test.limestone_block" : "Block of limestone"
+  "block.test.limestone_block" : "Block of limestone",
+  "block.test.enriched_dirt_block" : "Block of enriched dirt",
+  "block.test.enriched_mycelium_block": "Block of enriched mycelium"
 }
