@@ -39,11 +39,11 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
         boolean isBigMushroom = canBuildBigMushroom(origin, level, stemLength);
 
         target_block = target_block.below();
-        level.setBlock(target_block, cap, 2);
+        level.setBlock(target_block, stem, 2);
         if(isBigMushroom) {
             for(int i = 1; i < stemLength; i++) {
                 target_block = target_block.below();
-                level.setBlock(target_block, cap, 2);
+                level.setBlock(target_block, stem, 2);
             }
         }
 
