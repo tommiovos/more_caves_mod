@@ -21,6 +21,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import net.tom.test.features.ModFeatures;
 import net.tom.test.features.configuration.HotCaveVegetationConfig;
+import net.tom.test.features.configuration.SmallBlueshroomConfig;
 
 import java.util.List;
 
@@ -32,6 +33,10 @@ public class ModConfiguredFeatures {
             Blocks.SOUL_SOIL.defaultBlockState(),
             Blocks.SOUL_SOIL.defaultBlockState(),
             true
+    )));
+
+    public static final RegistryObject<ConfiguredFeature<SmallBlueshroomConfig, ?>> SMALL_BLUESHROOM = CONFIGURED_FEATURES.register("small_blueshroom", () -> new ConfiguredFeature<>(ModFeatures.SMALL_BLUESHROOM.get(), new SmallBlueshroomConfig(
+            Blocks.SOUL_SOIL.defaultBlockState()
     )));
 
     public static final Holder<ConfiguredFeature<GeodeConfiguration, ?>> ALT_AMETHYST =

@@ -56,15 +56,9 @@ public class TestSurfaceRuleData
                             SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, PODZOL),
                             // SurfaceRules.ifTrue(SurfaceRules.ON_CEILING, SurfaceRules.ifTrue(noise, ENRICHED_MYCELIUM)),
                             SurfaceRules.ifTrue(SurfaceRules.UNDER_CEILING, ENRICHED_DIRT),
-                            SurfaceRules.ifTrue(below35, LIMESTONE_BLOCK),
-                            // default to Grass block otherwise
-                            GRASS_BLOCK
+                            SurfaceRules.ifTrue(below35, LIMESTONE_BLOCK)
                     )
-            ),
-            SurfaceRules.ifTrue(SurfaceRules.isBiome(TestBiomes.COLD_BLUE), BLUE_TERRACOTTA),
-
-            // Default to a grass and dirt block if on floor
-            SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, grassSurface)
+            )
         );
     }
 

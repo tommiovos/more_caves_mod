@@ -70,11 +70,11 @@ public class ModBiomes
                 .addCarver(GenerationStep.Carving.AIR, Carvers.CAVE)
                 .addCarver(GenerationStep.Carving.AIR, Carvers.CAVE_EXTRA_UNDERGROUND)
                 .addCarver(GenerationStep.Carving.AIR, Carvers.CANYON)
-                .addFeature(GenerationStep.Decoration.LAKES, MiscOverworldPlacements.LAKE_LAVA_UNDERGROUND)
-                .addFeature(GenerationStep.Decoration.LAKES, MiscOverworldPlacements.LAKE_LAVA_SURFACE)
+                //.addFeature(GenerationStep.Decoration.LAKES, MiscOverworldPlacements.LAKE_LAVA_UNDERGROUND)
+                //.addFeature(GenerationStep.Decoration.LAKES, MiscOverworldPlacements.LAKE_LAVA_SURFACE)
                 //.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, CavePlacements.LUSH_CAVES_VEGETATION)
                 .addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.getHolder(ModPlacedFeatures.CAVE_FUNGI.get()))
-                .addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, ModConfiguredFeatures.NEW_AMETH);
+                .addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, ModPlacedFeatures.getHolder(ModPlacedFeatures.SMALL_BLUESHROOM.get()));
 
         BiomeDefaultFeatures.addDefaultOres(generationSettings);
 

@@ -24,7 +24,14 @@ public class ModPlacedFeatures {
     public static final DeferredRegister<PlacedFeature> PLACED_FEATURES = DeferredRegister.create(Registry.PLACED_FEATURE_REGISTRY, TestMod.MOD_ID);
 
     public static final RegistryObject<PlacedFeature> CAVE_FUNGI = register("hot_cave_vegetation", ModConfiguredFeatures.HOT_CAVE_VEGETATION,
-            CountOnEveryCeilingPlacement.of(6),
+            CountOnEveryCeilingPlacement.of(4),
+            BlockPredicateFilter.forPredicate(BlockPredicate.not(BlockPredicate.matchesFluids(Fluids.LAVA))),
+            BlockPredicateFilter.forPredicate(BlockPredicate.not(BlockPredicate.matchesBlocks(Blocks.GRASS, Blocks.TALL_GRASS, Blocks.AZALEA, Blocks.MOSS_CARPET, Blocks.FLOWERING_AZALEA, Blocks.OAK_WOOD, Blocks.RAIL))),
+            BiomeFilter.biome()
+    );
+
+    public static final RegistryObject<PlacedFeature> SMALL_BLUESHROOM = register("small_blueshroom", ModConfiguredFeatures.SMALL_BLUESHROOM,
+            CountOnEveryCeilingPlacement.of(3),
             BlockPredicateFilter.forPredicate(BlockPredicate.not(BlockPredicate.matchesFluids(Fluids.LAVA))),
             BlockPredicateFilter.forPredicate(BlockPredicate.not(BlockPredicate.matchesBlocks(Blocks.GRASS, Blocks.TALL_GRASS, Blocks.AZALEA, Blocks.MOSS_CARPET, Blocks.FLOWERING_AZALEA, Blocks.OAK_WOOD, Blocks.RAIL))),
             BiomeFilter.biome()
