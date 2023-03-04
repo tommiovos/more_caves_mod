@@ -1,8 +1,10 @@
 {
 	"credit": "Made with Blockbench",
+	"render_type": "minecraft:translucent",
 	"texture_size": [16, 20],
 	"textures": {
-		"1": "test:block/blueshroom_stem_block_full"
+		"1": "test:block/blueshroom_stem_block_full",
+		"particle": "test:block/blueshroom_stem_block_full"
 	},
 	"elements": [
 		{

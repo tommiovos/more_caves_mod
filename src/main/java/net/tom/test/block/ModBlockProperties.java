@@ -2,8 +2,12 @@ package net.tom.test.block;
 
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+
+import java.util.function.ToIntFunction;
 
 public class ModBlockProperties {
 
@@ -25,6 +29,7 @@ public class ModBlockProperties {
             .randomTicks()
             .strength(1)
             .sound(SoundType.STEM)
+            .lightLevel(litBlockEmission(6))
             .noOcclusion()
             .dynamicShape();
 
@@ -32,6 +37,13 @@ public class ModBlockProperties {
             .randomTicks()
             .strength(1)
             .sound(SoundType.STEM)
+            .lightLevel(litBlockEmission(6))
             .noOcclusion()
             .dynamicShape();
+
+    private static ToIntFunction<BlockState> litBlockEmission(int lightLevel) {
+        return (state) -> {
+            return lightLevel;
+        };
+    }
 }

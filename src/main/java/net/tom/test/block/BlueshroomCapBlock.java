@@ -7,13 +7,14 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.AbstractGlassBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BlueshroomCapBlock extends Block {
+public class BlueshroomCapBlock extends AbstractGlassBlock {
     protected static final VoxelShape SHAPE = Block.box(0, 8, 0, 16, 16, 16);
 
     public BlueshroomCapBlock(BlockBehaviour.Properties properties) {
