@@ -30,12 +30,10 @@ public class SmallBlueshroomFeature extends Feature<SmallBlueshroomConfig> {
         BlockState cap = ModBlocks.BLUESHROOM_CAP_BLOCK.get().defaultBlockState();
         BlockState enriched_mycelium = ModBlocks.ENRICHED_MYCELIUM_BLOCK.get().defaultBlockState();
 
-        int stemLength = 0;
-
-        int rand100 = ThreadLocalRandom.current().nextInt(0, 100);
-        if (rand100 < 20) { stemLength = 1; }
-        else if (rand100 < 70) { stemLength = 2; }
-        else { stemLength = 3; }
+        int stemLengthHardCap = 5;
+        int maxStemLength = deterministicMaxStemLength(target_block, level, stemLengthHardCap);
+        if(maxStemLength == 0) return false;
+        int stemLength = maxStemLength == 1 ? 1 : ThreadLocalRandom.current().nextInt(Math.max(1, maxStemLength - 2), maxStemLength);
 
         // Set mycelium above shroom
         level.setBlock(target_block.above(), enriched_mycelium, 2);
@@ -51,4 +49,36 @@ public class SmallBlueshroomFeature extends Feature<SmallBlueshroomConfig> {
         level.setBlock(target_block.below(), cap, 2);
         return true;
     }
+
+
+    public int deterministicMaxStemLength(BlockPos pos, WorldGenLevel level, int hardCap) {
+
+        /*
+
+            | |           KO = 0
+            | |   OK = 1; KO = 0
+            | |   OK = 2; KO = 1
+            | |        3       2
+            | |        4       3
+            ...        5       4
+         */
+
+        if(!isBlockAir(pos, level)) return 0;
+        pos = pos.below();
+        if(!isBlockAir(pos, level)) return 0;
+        int length = 1;
+        for(int i = 0; i < hardCap-2; i++) {
+            pos = pos.below();
+            if(!isBlockAir(pos, level)) return length;
+            length++;
+        }
+
+        return length;
+    }
+
+
+    public boolean isBlockAir(BlockPos pos, WorldGenLevel level) {
+        return level.getBlockState(pos) == Blocks.AIR.defaultBlockState();
+    }
+
 }
