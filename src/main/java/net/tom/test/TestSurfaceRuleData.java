@@ -37,6 +37,10 @@ public class TestSurfaceRuleData
     private static final SurfaceRules.RuleSource LIMESTONE_BLOCK = makeStateRule(ModBlocks.LIMESTONE_BLOCK.get());
     private static final SurfaceRules.RuleSource ENRICHED_DIRT = makeStateRule(ModBlocks.ENRICHED_DIRT_BLOCK.get());
     private static final SurfaceRules.RuleSource ENRICHED_MYCELIUM = makeStateRule(ModBlocks.ENRICHED_MYCELIUM_BLOCK.get());
+
+    private static SurfaceRules.ConditionSource surfaceNoiseAbove(double nThres) {
+        return SurfaceRules.noiseCondition(Noises.SURFACE, nThres / 8.25D, Double.MAX_VALUE);
+    }
     protected static SurfaceRules.RuleSource makeRules()
     {
         SurfaceRules.ConditionSource isAtOrAboveWaterLevel = SurfaceRules.waterBlockCheck(-1, 0);
@@ -45,6 +49,7 @@ public class TestSurfaceRuleData
         SurfaceRules.ConditionSource caveCheeseNoise = SurfaceRules.noiseCondition(Noises.CAVE_CHEESE, 1.0D);
         SurfaceRules.ConditionSource noise = SurfaceRules.noiseCondition(Noises.PATCH, 0.3D);
         SurfaceRules.RuleSource grassSurface = SurfaceRules.sequence(SurfaceRules.ifTrue(isAtOrAboveWaterLevel, GRASS_BLOCK), DIRT);
+        SurfaceRules.ConditionSource stoneNoise = surfaceNoiseAbove(1.75D);
 
 
         return SurfaceRules.sequence(
@@ -56,7 +61,7 @@ public class TestSurfaceRuleData
                             SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, PODZOL),
                             // SurfaceRules.ifTrue(SurfaceRules.ON_CEILING, SurfaceRules.ifTrue(noise, ENRICHED_MYCELIUM)),
                             SurfaceRules.ifTrue(SurfaceRules.UNDER_CEILING, ENRICHED_DIRT),
-                            SurfaceRules.ifTrue(below35, LIMESTONE_BLOCK)
+                            SurfaceRules.ifTrue(below35, SurfaceRules.ifTrue(stoneNoise, LIMESTONE_BLOCK))
                     )
             )
         );
