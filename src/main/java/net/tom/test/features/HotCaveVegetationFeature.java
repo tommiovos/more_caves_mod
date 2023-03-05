@@ -27,19 +27,12 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
 
         //int stemLength = ThreadLocalRandom.current().nextInt(2, 4 + 1);
         //int radius = ThreadLocalRandom.current().nextInt(1, 2 + 1);
-        int stemLength = 2;
-        int radius = 2;
-        int allowedNonEmptyBlocksCount = 0;
+        int stemLengthHardCap = 5;
+        int maxStemLength = deterministicMaxStemLength(origin, level, stemLengthHardCap);
+        if(maxStemLength == 0) return false;
+        int stemLength = maxStemLength == 1 ? 1 : ThreadLocalRandom.current().nextInt(1, maxStemLength);
+        int radius = 1;
 
-        /*System.out.println(Integer.toString(((radius*2*2) *stemLength) - allowedNonEmptyBlocksCount));*/
-        int spaceAv = spaceAvailableBelow(radius, stemLength+1, false, level, origin);
-        if (spaceAv < ( (radius*2*2) *stemLength) - allowedNonEmptyBlocksCount) {
-            return false;
-        };
-        System.out.println("**********************");
-        System.out.println("x :" + Integer.toString(origin.getX()) +", y :" + Integer.toString(origin.getY()) + ", z :" + Integer.toString(origin.getZ()));
-        System.out.println("space available : " + Integer.toString(spaceAv));
-        System.out.println("**********************");
         BlockState stem = Blocks.MUSHROOM_STEM.defaultBlockState();
         BlockState cap = Blocks.BROWN_MUSHROOM_BLOCK.defaultBlockState();
         BlockState enriched_mycelium = ModBlocks.ENRICHED_MYCELIUM_BLOCK.get().defaultBlockState();
@@ -47,10 +40,9 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
 
         //boolean isBigMushroom = canBuildBigMushroom(origin, level, stemLength);
         boolean isBigMushroom = true;
-
         level.setBlock(target_block, stem, 2);
-        if(isBigMushroom) {
-            for(int i = 1; i < stemLength; i++) {
+        if(stemLength > 1) {
+            for (int i = 1; i < stemLength; i++) {
                 target_block = target_block.below();
                 level.setBlock(target_block, stem, 2);
             }
@@ -58,10 +50,10 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
 
         target_block = target_block.below();
 
-        // Create mushroom cap
-        for (int x=-(radius/2); x<(radius/2); x++) {
-            for (int z=-(radius/2); z<(radius/2); z++) {
-                if(!isBigMushroom) {
+        // Create mushroom
+        for (int x=-radius; x<=radius; x++) {
+            for (int z=-radius; z<=radius; z++) {
+                if(stemLength == 1) {
                     if(!isBlockAir(target_block.offset(x, 0, z), level)) continue;
                 }
                 level.setBlock(target_block.offset(x, 0, z), cap, 2);
@@ -93,17 +85,31 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
         return true;
     }
 
-    public boolean canBuildBigMushroom(BlockPos pos, WorldGenLevel level, int stemLength) {
-        for(int i = 1; i<=stemLength+1; i++) {
+    public int deterministicMaxStemLength(BlockPos pos, WorldGenLevel level, int hardCap) {
+
+        /*
+
+            | |           KO = 0
+            | |   OK = 1; KO = 0
+          | | | |         KO = 1
+          | | | |      2       1
+          | | | |      3       2
+            ...        4       3
+         */
+
+        if(!isBlockAir(pos, level)) return 0;
+        pos = pos.below();
+        if(!isBlockAir(pos, level)) return 0;
+        int length = 1;
+        pos = pos.below();
+        if(!isAreaAllFree(pos, level, -1, 1, 0, 0, -1, 1)) return length;
+
+        for(int i = 0; i < hardCap-2; i++) {
             pos = pos.below();
-            if(!isBlockAir(pos, level)) return false;
+            if(!isAreaAllFree(pos, level, -1, 1, 0, 0, -1, 1)) return length;
+            length++;
         }
-        for(int z = -1; z < 2; z++) {
-            for (int x = -1; x < 2; x++) {
-                if(!isBlockAir(pos.offset(x,0,z), level)) return false;
-            }
-        }
-        return true;
+        return length;
     }
 
     public boolean isOnEdge(int radius, int val) {
@@ -113,6 +119,53 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
     public boolean isBlockAir(BlockPos pos, WorldGenLevel level) {
         return level.getBlockState(pos) == Blocks.AIR.defaultBlockState();
     }
+
+    public boolean isAreaAllFree(BlockPos pos, WorldGenLevel level, int xOffsetStart, int xOffsetEnd, int yOffsetStart, int yOffsetEnd, int zOffsetStart, int zOffsetEnd) {
+        for(int x = xOffsetStart; x <= xOffsetEnd; x++) {
+            for(int y = yOffsetStart; y <= yOffsetEnd; y++) {
+                for(int z = zOffsetStart; z <= zOffsetEnd; z++) {
+                    if(!isBlockAir(pos.offset(x,y,z), level)) return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean isAreaAnyFree(BlockPos pos, WorldGenLevel level, int xOffsetStart, int xOffsetEnd, int yOffsetStart, int yOffsetEnd, int zOffsetStart, int zOffsetEnd) {
+        for(int x = xOffsetStart; x <= xOffsetEnd; x++) {
+            for(int y = yOffsetStart; y <= yOffsetEnd; y++) {
+                for(int z = zOffsetStart; z <= zOffsetEnd; z++) {
+                    if(isBlockAir(pos.offset(x,y,z), level)) return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isAreaAmountFree(BlockPos pos, WorldGenLevel level, int xOffsetStart, int xOffsetEnd, int yOffsetStart, int yOffsetEnd, int zOffsetStart, int zOffsetEnd, int amount) {
+        int ct = 0;
+        for(int x = xOffsetStart; x <= xOffsetEnd; x++) {
+            for(int y = yOffsetStart; y <= yOffsetEnd; y++) {
+                for(int z = zOffsetStart; z <= zOffsetEnd; z++) {
+                    if(isBlockAir(pos.offset(x,y,z), level)) ct++;
+                    if(ct == amount) return true;
+                }
+            }
+        }
+        return ct >= amount;
+    }
+
+    /**
+     * @apiNote Returns whether at least the portion of the specified area is free. Rounds down, ex : 0.5 of a 3 block area will return False for 1 free, block, true for >=2.
+     * @param portion range ]0; 1]
+     */
+    public boolean isAreaPortionFree(BlockPos pos, WorldGenLevel level, int xOffsetStart, int xOffsetEnd, int yOffsetStart, int yOffsetEnd, int zOffsetStart, int zOffsetEnd, double portion) {
+        int amount = (int) Math.ceil((xOffsetEnd - xOffsetStart) * (yOffsetEnd - yOffsetStart) * (zOffsetEnd - zOffsetStart) * portion);
+        return isAreaAmountFree(pos, level, xOffsetStart, xOffsetEnd, yOffsetStart, yOffsetEnd, zOffsetStart,zOffsetEnd, amount);
+    }
+
+
+
 
     public int spaceAvailableBelow(int radius, int height, boolean checkCircleShaped, WorldGenLevel level, BlockPos pos) {
         int emptyBlocksCount = 0;
@@ -135,7 +188,7 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
                             if (level.getBlockState(pos.offset(x, y, z)) == Blocks.AIR.defaultBlockState()) {
                                 emptyBlocksCount++;
                             }
-                        };
+                        }
                     }
                 }
             }
