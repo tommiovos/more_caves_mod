@@ -30,7 +30,7 @@ public class HotCaveVegetationFeature extends Feature<HotCaveVegetationConfig> {
         int stemLengthHardCap = 5;
         int maxStemLength = deterministicMaxStemLength(origin, level, stemLengthHardCap);
         if(maxStemLength == 0) return false;
-        int stemLength = maxStemLength == 1 ? 1 : ThreadLocalRandom.current().nextInt(1, maxStemLength);
+        int stemLength = maxStemLength == 1 ? 1 : ThreadLocalRandom.current().nextInt(Math.max(1, maxStemLength - 2), maxStemLength);
         int radius = 1;
 
         BlockState stem = Blocks.MUSHROOM_STEM.defaultBlockState();
